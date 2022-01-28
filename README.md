@@ -30,7 +30,7 @@ Peng Cheng
 <p>Run bash runner.sh</p>
 <p>Then click website page and take screenshot</p>
 <p>See status code in the web page:</p>
-<p>comment the line 61</p>
+<p>Uncomment the line 61</p>
 <p>Then run python3 server.py</p>
 <p>Go to the web page, you can see status code in the page</p>
 Reference:
