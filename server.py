@@ -1,6 +1,7 @@
 #  coding: utf-8 
 import socketserver
-
+import os
+import time
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +29,84 @@ import socketserver
 
 
 class MyWebServer(socketserver.BaseRequestHandler):
-    
+    root = "./www"
+    def statu_200(self,content_type, content_len, file):
+        current_time = time.strftime("%a, %d %b %Y %I:%M:%S %Z", time.gmtime())
+        send = f"HTTP/1.1 200 OK\r\nDate: {current_time}\r\nContent-Type: {content_type}\r\nContent-Length: {content_len}\r\n\r\n{file}"
+        self.request.sendall(bytearray(send, "utf-8"))
+    def statu_301(self, location=None):
+        current_time = time.strftime("%a, %d %b %Y %I:%M:%S %Z", time.gmtime())
+        send = f"HTTP/1.1 301 Moved Permanently\r\nDate: {current_time}\r\n\r\nLocation: {location}"
+        self.request.sendall(bytearray(send, "utf-8"))
+    def statu_404(self):
+        send = "HTTP/1.1 404 Not Found\r\n"
+        self.request.sendall(bytearray(send, "utf-8"))
+    def statu_405(self):
+        send = "HTTP/1.1 405 Method Not Allowed\r\n"
+        self.request.sendall(bytearray(send, "utf-8"))
+
+
     def handle(self):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
-        self.request.sendall(bytearray("OK",'utf-8'))
+        data_decode= self.data.decode("utf-8").split("\r\n")
+        header_string = data_decode[0]
+        print(header_string)
+
+        method, path, HTTP_version = header_string.split(" ")
+        
+        path_abs = os.path.abspath(self.root+ path)
+
+        if method != "GET":
+            self.statu_405()
+
+        else:
+           
+            if os.path.exists(path_abs) and (path.endswith("/") or "." in path):
+                if ".css" in path_abs:
+                    try:
+                        f = open(path_abs, "r")
+                        return_text = f.read()
+                        self.statu_200("text/css", len(return_text), return_text)
+                    except:
+                        self.statu_404()
+                    finally:
+                        f.close()
+
+                elif ".html" in path_abs:
+                    try:
+                        f = open(path_abs, "r")
+                        return_text = f.read()
+                        self.statu_200("text/html", len(return_text), return_text)
+                    except:
+                        self.statu_404()
+                    finally:
+                        f.close()
+
+                else:
+                    if path.endswith("/"):
+                        path_abs = os.path.realpath(self.root+ path)
+                        try:
+                            f = open(path_abs+"/index.html", "r")
+                            return_text = f.read()
+                            self.statu_200("text/html", len(return_text), return_text)
+                            
+                        except:
+                            self.statu_404()
+                        finally:
+                            f.close()
+                    else:
+                        self.statu_404()
+
+            elif os.path.exists(path_abs) and not path.endswith("/"):
+                path_abs = os.path.abspath(self.root+ path + "/")
+                try:
+                    self.statu_301(path_abs)
+                except:
+                    self.statu_404()
+            else:
+                self.statu_404()    
+
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
