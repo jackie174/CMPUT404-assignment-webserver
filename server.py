@@ -52,8 +52,10 @@ class MyWebServer(socketserver.BaseRequestHandler):
         data_decode= self.data.decode("utf-8").split("\r\n")
         header_string = data_decode[0]
         print(header_string)
-
-        method, path, HTTP_version = header_string.split(" ")
+        try:
+            method, path, HTTP_version = header_string.split(" ")
+        except:
+            self.statu_404()
         
         path_abs = os.path.abspath(self.root+ path)
         #without this line, we cannnot see the 404 error in the website page.
