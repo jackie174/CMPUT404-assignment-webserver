@@ -26,7 +26,11 @@ compatible) http://docs.python.org/2/library/socketserver.html
 
 server.py also contains contributions from:
 Peng Cheng
-
+<p>To get image:</p>
+<p>Run bash runner.sh</p>
+<p>Then click website page and take screenshot</p>
+<p>See status code in the web page</p>
+<p>comment the line 60</p>
 Reference:
 <p>1. get Date format</p>
 https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-29.php
