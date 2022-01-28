@@ -56,7 +56,6 @@ class MyWebServer(socketserver.BaseRequestHandler):
             method, path, HTTP_version = header_string.split(" ")
         except:
             self.statu_404()
-        path_abs = os.path.abspath(self.root+ path)
         #without this line, we cannnot see the 404 error in the website page.
         #if we want to get root.png / deep.png correctly, we need to comment this line
         #self.request.sendall(bytearray("     ", "utf-8"))
