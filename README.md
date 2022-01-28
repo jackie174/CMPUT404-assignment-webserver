@@ -24,11 +24,13 @@ examples thus some of the code is Copyright © 2001-2013 Python
 Software Foundation; All Rights Reserved under the PSF license (GPL
 compatible) http://docs.python.org/2/library/socketserver.html
 
+server.py also contains contributions from:
+Peng Cheng
+
 Reference:
-1. get Date format
+<p>1. get Date format</p>
 https://www.w3resource.com/python-exercises/date-time-exercise/python-date-time-exercise-29.php
-2. how to use os.path
-https://www.geeksforgeeks.org/python-os-path-join-method/
+<p>2. how to use os.path</p>
 https://docs.python.org/3/library/os.path.html
-3. how to format string in multiple elements
+<p>3. how to format string in multiple elements</p>
 https://www.python.org/dev/peps/pep-0498/
